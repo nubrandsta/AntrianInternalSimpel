@@ -207,6 +207,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="SELESAIKAN PESANAN"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_selesaiActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btn_batal">
       <Properties>
@@ -246,6 +249,13 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txt_jumlah">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="1"/>
+      </Properties>
+      <Events>
+        <EventHandler event="inputMethodTextChanged" listener="java.awt.event.InputMethodListener" parameters="java.awt.event.InputMethodEvent" handler="txt_jumlahInputMethodTextChanged"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txt_jumlahActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel5">
       <Properties>

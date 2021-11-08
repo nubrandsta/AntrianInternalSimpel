@@ -248,6 +248,11 @@ public class Antrian extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tbl_antrian);
 
         btn_selesai.setText("SELESAIKAN PESANAN");
+        btn_selesai.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_selesaiActionPerformed(evt);
+            }
+        });
 
         btn_batal.setText("BATALKAN PESANAN");
         btn_batal.addActionListener(new java.awt.event.ActionListener() {
@@ -271,6 +276,20 @@ public class Antrian extends javax.swing.JFrame {
         jLabel3.setText("ID Menu");
 
         jLabel4.setText("Menu");
+
+        txt_jumlah.setText("1");
+        txt_jumlah.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                txt_jumlahInputMethodTextChanged(evt);
+            }
+        });
+        txt_jumlah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_jumlahActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Jumlah");
 
@@ -437,7 +456,7 @@ public class Antrian extends javax.swing.JFrame {
     private void btn_baruActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_baruActionPerformed
         // TODO add your handling code here:
         txt_idPesanan.setText("");
-        txt_jumlah.setText("");
+        String jumlah = txt_jumlah.getText();
         txt_urut.setText(String.valueOf(getLast()+1));
         cmb_idmenu.setEnabled(true);
         
@@ -450,7 +469,7 @@ public class Antrian extends javax.swing.JFrame {
         String mon = date.substring(5,7);
         String yer = date.substring(2,4);
         
-        txt_idPesanan.setText(itemGroup+day+mon+yer+itemId+antrianTerakhir);
+        txt_idPesanan.setText(itemGroup+day+mon+yer+itemId+jumlah+antrianTerakhir);
         showData();
     }//GEN-LAST:event_btn_baruActionPerformed
 
@@ -554,6 +573,141 @@ public class Antrian extends javax.swing.JFrame {
     private void txt_urutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_urutActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_urutActionPerformed
+
+    private void txt_jumlahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_jumlahActionPerformed
+        // TODO add your handling code here:
+        if(txt_idPesanan.isEditable()){
+            txt_idPesanan.setText("");
+            String jumlah = txt_jumlah.getText();
+            txt_urut.setText(String.valueOf(getLast()+1));
+            cmb_idmenu.setEnabled(true);
+
+            String selectedItemId = cmb_idmenu.getSelectedItem().toString();
+            String itemGroup = selectedItemId.substring(0,2);
+            String itemId = selectedItemId.substring(2,4);
+            String antrianTerakhir = String.valueOf(getLast()+1);
+            String date = java.time.LocalDate.now().toString();
+            String day = date.substring(8,10);
+            String mon = date.substring(5,7);
+            String yer = date.substring(2,4);
+
+            txt_idPesanan.setText(itemGroup+day+mon+yer+itemId+jumlah+antrianTerakhir);
+            showData();
+            }
+    }//GEN-LAST:event_txt_jumlahActionPerformed
+
+    private void txt_jumlahInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_txt_jumlahInputMethodTextChanged
+        // TODO add your handling code here:
+        if(txt_idPesanan.isEditable()){
+            txt_idPesanan.setText("");
+            String jumlah = txt_jumlah.getText();
+            txt_urut.setText(String.valueOf(getLast()+1));
+            cmb_idmenu.setEnabled(true);
+
+            String selectedItemId = cmb_idmenu.getSelectedItem().toString();
+            String itemGroup = selectedItemId.substring(0,2);
+            String itemId = selectedItemId.substring(2,4);
+            String antrianTerakhir = String.valueOf(getLast()+1);
+            String date = java.time.LocalDate.now().toString();
+            String day = date.substring(8,10);
+            String mon = date.substring(5,7);
+            String yer = date.substring(2,4);
+
+            txt_idPesanan.setText(itemGroup+day+mon+yer+itemId+jumlah+antrianTerakhir);
+            showData();
+            }
+        
+    }//GEN-LAST:event_txt_jumlahInputMethodTextChanged
+
+    private void btn_selesaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_selesaiActionPerformed
+        // TODO add your handling code here:
+        String idPesanan = txt_idPesanan.getText();
+        String idMenu = cmb_idmenu.getSelectedItem().toString();
+        String urutan = txt_urut.getText();
+        String jumlah = "";
+        String nama_menu = "";
+        String kategori_menu = "";
+        String harga = "";
+        
+        java.sql.Connection conn = new Koneksi().connect();
+        String query = "SELECT jumlah FROM tb_antrian WHERE id_pesanan='"+idPesanan+"'";
+        try{
+            java.sql.Statement state = conn.createStatement();
+            java.sql.ResultSet result = state.executeQuery(query);
+            while(result.next()){
+                jumlah = result.getString("jumlah");
+                
+                
+            }
+        }
+        catch(Exception e){
+            
+        }
+        query = "SELECT nama_menu,kategori_menu,harga_menu FROM tb_menu WHERE id_menu='"+idMenu+"'";
+        try{
+            java.sql.Statement state = conn.createStatement();
+            java.sql.ResultSet result = state.executeQuery(query);
+            while(result.next()){
+                nama_menu = result.getString("nama_menu");
+                kategori_menu = result.getString("kategori_menu");
+                harga = result.getString("harga_menu");
+                
+            }
+        }
+        catch(Exception e){
+
+        }
+        int total = Integer.parseInt(jumlah) * Integer.parseInt(harga);
+        
+        try{
+            java.sql.PreparedStatement state = conn.prepareStatement("INSERT INTO tb_transaksi (id_transaksi,kategori_menu,id_menu,nama_menu,harga_menu,jumlah,total) VALUES(?,?,?,?,?,?,?)");
+            try{
+                state.setString(1,idPesanan);
+                state.setString(2,kategori_menu);
+                state.setString(3,idMenu);
+                state.setString(4,nama_menu);
+                state.setString(5, harga);
+                state.setString(6, jumlah);
+                state.setString(7, String.valueOf(total));
+                state.executeUpdate();
+                
+                java.sql.Connection conn2 = new Koneksi().connect();
+                try{
+                    PreparedStatement delet = conn2.prepareStatement("DELETE FROM tb_antrian WHERE id_pesanan = ?");
+                    try{
+                            delet.setString(1,idPesanan);
+                            delet.executeUpdate();
+                            showData();
+                            JOptionPane.showMessageDialog(null, "Data Berhasil Disimpan", "Pesan", JOptionPane.INFORMATION_MESSAGE);
+                            popAntrian(urutan);
+                    }
+                    catch(Exception e){
+                        JOptionPane.showMessageDialog(null, "Data Gagal Disimpan", "Pesan", JOptionPane.INFORMATION_MESSAGE);
+                        e.printStackTrace();
+                        System.out.println(idPesanan);
+                    }
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                }
+                
+                
+            }
+            catch(Exception e){
+                
+            }
+        }
+        catch(Exception e){
+            
+        }
+        
+        
+        
+        
+        
+        
+        
+    }//GEN-LAST:event_btn_selesaiActionPerformed
 
     /**
      * @param args the command line arguments

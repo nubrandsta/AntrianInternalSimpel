@@ -253,6 +253,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="EDIT"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_editActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btn_laporan">
       <Properties>
@@ -266,6 +269,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="TAMBAH"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_tambahActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JComboBox" name="cmb_idmenu">
       <Properties>

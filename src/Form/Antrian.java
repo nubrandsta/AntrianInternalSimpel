@@ -135,6 +135,14 @@ public class Antrian extends javax.swing.JFrame {
         return antrian;
     }
     
+    public void clearInput(){
+        txt_idPesanan.setText("");
+        txt_namaMenu.setText("");
+        txt_jumlah.setText("");
+        
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -247,6 +255,11 @@ public class Antrian extends javax.swing.JFrame {
         });
 
         btn_edit.setText("EDIT");
+        btn_edit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_editActionPerformed(evt);
+            }
+        });
 
         btn_laporan.setText("Laporan");
         btn_laporan.addActionListener(new java.awt.event.ActionListener() {
@@ -256,6 +269,11 @@ public class Antrian extends javax.swing.JFrame {
         });
 
         btn_tambah.setText("TAMBAH");
+        btn_tambah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_tambahActionPerformed(evt);
+            }
+        });
 
         cmb_idmenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -358,7 +376,7 @@ public class Antrian extends javax.swing.JFrame {
         String selectedItemId = cmb_idmenu.getSelectedItem().toString();
         String itemGroup = selectedItemId.substring(0,2);
         String itemId = selectedItemId.substring(2,4);
-        String antrianTerakhir = String.valueOf(getLast());
+        String antrianTerakhir = String.valueOf(getLast()+1);
         String date = java.time.LocalDate.now().toString();
         String day = date.substring(8,10);
         String mon = date.substring(5,7);
@@ -410,6 +428,59 @@ public class Antrian extends javax.swing.JFrame {
         txt_idPesanan.setText(itemGroup+day+mon+yer+itemId+antrianTerakhir);
         showData();
     }//GEN-LAST:event_cmb_idmenuActionPerformed
+
+    private void btn_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editActionPerformed
+        // TODO add your handling code here:
+        String selectedMenu = cmb_idmenu.getSelectedItem().toString();
+        java.sql.Connection conn = new Koneksi().connect();
+        
+        try{
+            java.sql.PreparedStatement state = conn.prepareStatement("UPDATE tb_antrian SET jumlah = ? WHERE id_pesanan=?");
+            try{
+                state.setString(1, txt_jumlah.getText());
+                state.setString(2, txt_idPesanan.getText());
+                state.executeUpdate();
+                showData();
+                JOptionPane.showMessageDialog(null, "Data Berhasil Diedit", "Pesan", JOptionPane.INFORMATION_MESSAGE);
+            }
+            catch(Exception e){
+                System.out.println("Error updating");
+                JOptionPane.showMessageDialog(null, "Data Gagal Diedit", "Pesan", JOptionPane.INFORMATION_MESSAGE);
+                e.printStackTrace();
+            }
+            
+           
+        }
+        catch(Exception e){
+             e.printStackTrace();
+        }
+        
+    }//GEN-LAST:event_btn_editActionPerformed
+
+    private void btn_tambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_tambahActionPerformed
+        // TODO add your handling code here:
+        java.sql.Connection conn = new Koneksi().connect();
+        try {
+            java.sql.PreparedStatement stmt = conn.prepareStatement("INSERT INTO tb_antrian (id_pesanan, id_menu, jumlah, no_urut) VALUES(?,?,?,?)");
+            try {
+                stmt.setString(1, txt_idPesanan.getText());
+                stmt.setString(2, cmb_idmenu.getSelectedItem().toString());
+                stmt.setString(3, txt_jumlah.getText());
+                stmt.setString(4, String.valueOf(getLast()+1));
+                
+                stmt.executeUpdate();
+                showData();
+                JOptionPane.showMessageDialog(null, "Data Berhasil Disimpan", "Pesan", JOptionPane.INFORMATION_MESSAGE);
+                
+                clearInput();
+            } catch (Exception e){
+                JOptionPane.showMessageDialog(null, "Data Gagal Disimpan", "Pesan", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
+        } catch (Exception e){
+           
+            }
+    }//GEN-LAST:event_btn_tambahActionPerformed
 
     /**
      * @param args the command line arguments

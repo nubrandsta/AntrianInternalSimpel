@@ -8,6 +8,9 @@
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
     <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
+  <Events>
+    <EventHandler event="windowActivated" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowActivated"/>
+  </Events>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -28,35 +31,42 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jPanel1" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
-                      <Component id="jScrollPane1" min="-2" pref="279" max="-2" attributes="0"/>
+                      <Component id="jScrollPane1" min="-2" pref="479" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="btn_baru" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="btn_simpan" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="btn_selesai" alignment="0" max="32767" attributes="0"/>
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="txt_idPesanan" max="32767" attributes="0"/>
-                                  <Component id="txt_idMenu" max="32767" attributes="0"/>
-                                  <Component id="txt_namaMenu" max="32767" attributes="0"/>
-                                  <Component id="txt_jumlah" min="-2" pref="140" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                          </Group>
-                          <Component id="btn_batal" alignment="0" max="32767" attributes="0"/>
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               <Component id="btn_laporan" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="btn_selesai" alignment="0" max="32767" attributes="0"/>
+                          <Component id="btn_batal" alignment="0" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Component id="txt_idPesanan" max="32767" attributes="0"/>
+                                          <Component id="txt_namaMenu" max="32767" attributes="0"/>
+                                          <Component id="txt_jumlah" pref="140" max="32767" attributes="0"/>
+                                          <Component id="cmb_idmenu" alignment="0" max="32767" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="btn_baru" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="btn_tambah" pref="98" max="32767" attributes="0"/>
+                                          <Component id="btn_edit" max="32767" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                              </Group>
+                              <EmptySpace min="0" pref="4" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -83,8 +93,8 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="txt_idMenu" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cmb_idmenu" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -99,8 +109,10 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="btn_baru" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="btn_simpan" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btn_tambah" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="btn_edit" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="btn_laporan" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -163,14 +175,20 @@
         <Component class="javax.swing.JTable" name="tbl_antrian">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="4" rowCount="4">
+              <Table columnCount="7" rowCount="4">
                 <Column editable="true" title="ID_Pesanan" type="java.lang.Object"/>
-                <Column editable="true" title="Nama_pesanan" type="java.lang.Object"/>
-                <Column editable="true" title="Jumlah" type="java.lang.Object"/>
+                <Column editable="true" title="ID_Menu" type="java.lang.Object"/>
                 <Column editable="true" title="No_urut" type="java.lang.Object"/>
+                <Column editable="true" title="Jumlah" type="java.lang.Object"/>
+                <Column editable="true" title="Harga" type="java.lang.Object"/>
+                <Column editable="true" title="Nama_pesanan" type="java.lang.Object"/>
+                <Column editable="true" title="Kategori" type="java.lang.Object"/>
               </Table>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tbl_antrianMouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -191,8 +209,9 @@
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txt_idMenu">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txt_idPesananActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="txt_namaMenu">
       <Properties>
@@ -230,9 +249,9 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_baruActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btn_simpan">
+    <Component class="javax.swing.JButton" name="btn_edit">
       <Properties>
-        <Property name="text" type="java.lang.String" value="SIMPAN"/>
+        <Property name="text" type="java.lang.String" value="EDIT"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btn_laporan">
@@ -242,6 +261,24 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_laporanActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btn_tambah">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="TAMBAH"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="cmb_idmenu">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="0"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cmb_idmenuActionPerformed"/>
+      </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

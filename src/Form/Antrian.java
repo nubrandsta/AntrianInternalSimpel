@@ -4,6 +4,14 @@
  * and open the template in the editor.
  */
 package Form;
+import Config.Koneksi;
+
+import java.sql.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.*;
+import java.time.format.DateTimeFormatter;  
+import java.time.LocalDateTime; 
+
 
 /**
  *
@@ -17,6 +25,116 @@ public class Antrian extends javax.swing.JFrame {
     public Antrian() {
         initComponents();
     }
+    
+    private DefaultTableModel modelTabel;
+    public String selectedIdMenu;
+
+    
+    public void showData(){
+        modelTabel = new DefaultTableModel();
+        
+        modelTabel.addColumn("ID Pesanan");
+        modelTabel.addColumn("ID Menu");
+        modelTabel.addColumn("No Urut");
+        modelTabel.addColumn("Jumlah");
+        modelTabel.addColumn("Harga");
+        modelTabel.addColumn("Nama Pesanan");
+        modelTabel.addColumn("Kategori");
+        
+        tbl_antrian.setModel(modelTabel);
+        
+        java.sql.Connection conn1 = new Koneksi().connect();
+        try{
+            String query1="SELECT * FROM tb_antrian";
+            String currentIdMenu;
+            java.sql.Statement state1 = conn1.createStatement();
+            java.sql.ResultSet result1 = state1.executeQuery(query1);
+            int rowid = 0;
+            while(result1.next()){
+                
+                modelTabel.addRow(new Object[] {
+                result1.getString("id_pesanan"),
+                result1.getString("id_menu"),
+                result1.getString("no_urut"),
+                result1.getString("jumlah")
+            } );
+                currentIdMenu = result1.getString("id_menu");
+                
+                java.sql.Connection conn2 = new Koneksi().connect();
+                try{
+                    String query2= "SELECT nama_menu,kategori_menu,harga_menu FROM tb_menu WHERE id_menu='"+currentIdMenu+"'";
+                    java.sql.Statement state2 = conn2.createStatement();
+                    java.sql.ResultSet result2 = state2.executeQuery(query2);
+                    while(result2.next()){
+                        modelTabel.setValueAt(result2.getString("harga_menu"),rowid,4);
+                        modelTabel.setValueAt(result2.getString("nama_menu"),rowid,5);
+                        modelTabel.setValueAt(result2.getString("kategori_menu"),rowid,6);
+                    }
+                }
+                catch(Exception e){
+                    
+                }
+                rowid++;
+            }
+        }
+        catch(Exception e){
+            
+        }
+        
+        java.sql.Connection conn3 = new Koneksi().connect();
+        try{
+            String query3 = "SELECT id_menu FROM tb_menu";
+            java.sql.Statement state3 = conn3.createStatement();
+            java.sql.ResultSet result3 = state3.executeQuery(query3);
+            while(result3.next()){
+                cmb_idmenu.addItem(result3.getString("id_menu"));
+            }
+        }
+        catch(Exception e){
+            
+        }
+        
+        String selectedMenu = cmb_idmenu.getSelectedItem().toString();
+        java.sql.Connection conn4 = new Koneksi().connect();
+        String query4 = "SELECT nama_menu FROM tb_menu WHERE id_menu ='"+selectedMenu+"'";
+        try{
+            java.sql.Statement state4 = conn4.createStatement();
+            java.sql.ResultSet result4 = state4.executeQuery(query4);
+            while(result4.next()){
+                String nama = result4.getString("nama_menu");
+                txt_namaMenu.setText(nama);
+            }
+            
+           
+        }
+        catch(Exception e){
+             e.printStackTrace();
+        }
+        
+    }
+    
+    public int getLast(){
+        int antrian = 0;
+        
+        String selectedMenu = cmb_idmenu.getSelectedItem().toString();
+        java.sql.Connection conn = new Koneksi().connect();
+        String query = "SELECT MAX(no_urut) FROM tb_antrian";
+        try{
+            java.sql.Statement state = conn.createStatement();
+            java.sql.ResultSet result = state.executeQuery(query);
+            while(result.next()){
+                antrian = Integer.parseInt(result.getString("MAX(no_urut)"));
+            }
+            
+           
+        }
+        catch(Exception e){
+             e.printStackTrace();
+        }
+        
+        return antrian;
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -34,7 +152,6 @@ public class Antrian extends javax.swing.JFrame {
         btn_selesai = new javax.swing.JButton();
         btn_batal = new javax.swing.JButton();
         txt_idPesanan = new javax.swing.JTextField();
-        txt_idMenu = new javax.swing.JTextField();
         txt_namaMenu = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -42,10 +159,17 @@ public class Antrian extends javax.swing.JFrame {
         txt_jumlah = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         btn_baru = new javax.swing.JButton();
-        btn_simpan = new javax.swing.JButton();
+        btn_edit = new javax.swing.JButton();
         btn_laporan = new javax.swing.JButton();
+        btn_tambah = new javax.swing.JButton();
+        cmb_idmenu = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(0, 153, 153));
 
@@ -72,15 +196,20 @@ public class Antrian extends javax.swing.JFrame {
 
         tbl_antrian.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID_Pesanan", "Nama_pesanan", "Jumlah", "No_urut"
+                "ID_Pesanan", "ID_Menu", "No_urut", "Jumlah", "Harga", "Nama_pesanan", "Kategori"
             }
         ));
+        tbl_antrian.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_antrianMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbl_antrian);
 
         btn_selesai.setText("SELESAIKAN PESANAN");
@@ -93,6 +222,11 @@ public class Antrian extends javax.swing.JFrame {
         });
 
         txt_idPesanan.setEditable(false);
+        txt_idPesanan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_idPesananActionPerformed(evt);
+            }
+        });
 
         txt_namaMenu.setEditable(false);
         txt_namaMenu.setText(" ");
@@ -112,12 +246,20 @@ public class Antrian extends javax.swing.JFrame {
             }
         });
 
-        btn_simpan.setText("SIMPAN");
+        btn_edit.setText("EDIT");
 
         btn_laporan.setText("Laporan");
         btn_laporan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_laporanActionPerformed(evt);
+            }
+        });
+
+        btn_tambah.setText("TAMBAH");
+
+        cmb_idmenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmb_idmenuActionPerformed(evt);
             }
         });
 
@@ -130,31 +272,35 @@ public class Antrian extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btn_baru)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btn_simpan))
-                            .addComponent(btn_selesai, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txt_idPesanan)
-                                    .addComponent(txt_idMenu)
-                                    .addComponent(txt_namaMenu)
-                                    .addComponent(txt_jumlah, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(btn_batal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(btn_laporan)))))
+                                .addComponent(btn_laporan))
+                            .addComponent(btn_selesai, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btn_batal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel2)
+                                            .addComponent(jLabel3)
+                                            .addComponent(jLabel4)
+                                            .addComponent(jLabel5))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txt_idPesanan)
+                                            .addComponent(txt_namaMenu)
+                                            .addComponent(txt_jumlah, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                                            .addComponent(cmb_idmenu, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btn_baru)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(btn_tambah, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
+                                            .addComponent(btn_edit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addGap(0, 4, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -174,8 +320,8 @@ public class Antrian extends javax.swing.JFrame {
                             .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txt_idMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
+                            .addComponent(jLabel3)
+                            .addComponent(cmb_idmenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txt_namaMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -187,7 +333,9 @@ public class Antrian extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btn_baru)
-                            .addComponent(btn_simpan))
+                            .addComponent(btn_tambah))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_edit)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btn_laporan))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -203,11 +351,65 @@ public class Antrian extends javax.swing.JFrame {
 
     private void btn_baruActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_baruActionPerformed
         // TODO add your handling code here:
+        txt_idPesanan.setText("");
+        txt_jumlah.setText("");
+        cmb_idmenu.setEnabled(true);
+        
+        String selectedItemId = cmb_idmenu.getSelectedItem().toString();
+        String itemGroup = selectedItemId.substring(0,2);
+        String itemId = selectedItemId.substring(2,4);
+        String antrianTerakhir = String.valueOf(getLast());
+        String date = java.time.LocalDate.now().toString();
+        String day = date.substring(8,10);
+        String mon = date.substring(5,7);
+        String yer = date.substring(2,4);
+        
+        txt_idPesanan.setText(itemGroup+day+mon+yer+itemId+antrianTerakhir);
+        showData();
     }//GEN-LAST:event_btn_baruActionPerformed
 
     private void btn_laporanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_laporanActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_laporanActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        // TODO add your handling code here:
+        showData();
+    }//GEN-LAST:event_formWindowActivated
+
+    private void tbl_antrianMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_antrianMouseClicked
+        // TODO add your handling code here:
+        
+        int dataPesanan = tbl_antrian.getSelectedRow();
+        cmb_idmenu.setSelectedItem(modelTabel.getValueAt(dataPesanan,1).toString());
+        txt_idPesanan.setText(modelTabel.getValueAt(dataPesanan,0).toString());
+        txt_jumlah.setText(modelTabel.getValueAt(dataPesanan,3).toString());
+        cmb_idmenu.setEnabled(false);
+        
+        
+        
+        
+        
+    }//GEN-LAST:event_tbl_antrianMouseClicked
+
+    private void txt_idPesananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_idPesananActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_idPesananActionPerformed
+
+    private void cmb_idmenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmb_idmenuActionPerformed
+        // TODO add your handling code here:
+        String selectedItemId = cmb_idmenu.getSelectedItem().toString();
+        String itemGroup = selectedItemId.substring(0,2);
+        String itemId = selectedItemId.substring(2,4);
+        String antrianTerakhir = String.valueOf(getLast()+1);
+        String date = java.time.LocalDate.now().toString();
+        String day = date.substring(8,10);
+        String mon = date.substring(5,7);
+        String yer = date.substring(2,4);
+        
+        txt_idPesanan.setText(itemGroup+day+mon+yer+itemId+antrianTerakhir);
+        showData();
+    }//GEN-LAST:event_cmb_idmenuActionPerformed
 
     /**
      * @param args the command line arguments
@@ -247,9 +449,11 @@ public class Antrian extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_baru;
     private javax.swing.JButton btn_batal;
+    private javax.swing.JButton btn_edit;
     private javax.swing.JButton btn_laporan;
     private javax.swing.JButton btn_selesai;
-    private javax.swing.JButton btn_simpan;
+    private javax.swing.JButton btn_tambah;
+    private javax.swing.JComboBox<String> cmb_idmenu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -258,7 +462,6 @@ public class Antrian extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tbl_antrian;
-    private javax.swing.JTextField txt_idMenu;
     private javax.swing.JTextField txt_idPesanan;
     private javax.swing.JTextField txt_jumlah;
     private javax.swing.JTextField txt_namaMenu;

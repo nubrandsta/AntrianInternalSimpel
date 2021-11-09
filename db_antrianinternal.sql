@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.0
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 08, 2021 at 07:16 AM
--- Server version: 10.4.19-MariaDB
--- PHP Version: 8.0.6
+-- Generation Time: Nov 09, 2021 at 03:48 AM
+-- Server version: 10.4.20-MariaDB
+-- PHP Version: 7.3.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -42,7 +42,9 @@ INSERT INTO `tb_antrian` (`id_pesanan`, `id_menu`, `jumlah`, `no_urut`) VALUES
 ('AB0711210103', 'AB01', 2, 2),
 ('AB0811210136', 'AB01', 3, 4),
 ('AG0711210204', 'AG02', 1, 3),
-('MA0711210202', 'MA02', 1, 1);
+('AG0911210276', 'AG02', 7, 6),
+('MA0711210202', 'MA02', 1, 1),
+('MA0911210155', 'MA01', 5, 5);
 
 -- --------------------------------------------------------
 

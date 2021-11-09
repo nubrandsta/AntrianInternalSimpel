@@ -339,6 +339,11 @@ public class Antrian extends javax.swing.JFrame {
         jLabel6.setText("Urutan");
 
         btn_display.setText("DISPLAY");
+        btn_display.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_displayActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -717,6 +722,12 @@ public class Antrian extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_btn_selesaiActionPerformed
+
+    private void btn_displayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_displayActionPerformed
+        // TODO add your handling code here:
+        new Display().setVisible(true);
+        
+    }//GEN-LAST:event_btn_displayActionPerformed
 
     /**
      * @param args the command line arguments

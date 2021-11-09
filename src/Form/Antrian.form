@@ -72,7 +72,8 @@
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <Component id="btn_display" max="32767" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="btn_laporan" min="-2" pref="98" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -125,7 +126,10 @@
                           <Component id="btn_baru" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="btn_laporan" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="btn_laporan" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btn_display" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
                   <Component id="jScrollPane1" min="-2" pref="295" max="-2" attributes="0"/>
               </Group>
@@ -318,6 +322,11 @@
     <Component class="javax.swing.JLabel" name="jLabel6">
       <Properties>
         <Property name="text" type="java.lang.String" value="Urutan"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btn_display">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="DISPLAY"/>
       </Properties>
     </Component>
   </SubComponents>

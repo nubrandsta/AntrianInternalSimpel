@@ -199,6 +199,7 @@ public class Antrian extends javax.swing.JFrame {
         cmb_idmenu = new javax.swing.JComboBox<>();
         txt_urut = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
+        btn_display = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -337,6 +338,8 @@ public class Antrian extends javax.swing.JFrame {
 
         jLabel6.setText("Urutan");
 
+        btn_display.setText("DISPLAY");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -378,7 +381,8 @@ public class Antrian extends javax.swing.JFrame {
                                             .addComponent(btn_edit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btn_display, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btn_laporan, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
@@ -419,7 +423,9 @@ public class Antrian extends javax.swing.JFrame {
                             .addComponent(btn_edit)
                             .addComponent(btn_baru))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btn_laporan))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btn_laporan)
+                            .addComponent(btn_display)))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -750,6 +756,7 @@ public class Antrian extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_baru;
     private javax.swing.JButton btn_batal;
+    private javax.swing.JButton btn_display;
     private javax.swing.JButton btn_edit;
     private javax.swing.JButton btn_laporan;
     private javax.swing.JButton btn_selesai;

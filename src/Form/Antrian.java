@@ -12,6 +12,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.*;
 import java.time.format.DateTimeFormatter;  
 import java.time.LocalDateTime; 
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 
 /**
@@ -112,7 +116,7 @@ public class Antrian extends javax.swing.JFrame {
         catch(Exception e){
              e.printStackTrace();
         }
-        
+         
     }
     
     public int getLast(){
@@ -448,12 +452,16 @@ public class Antrian extends javax.swing.JFrame {
                     PreparedStatement state = conn.prepareStatement("DELETE FROM tb_antrian WHERE id_pesanan = ?");
                     try{
                             state.setString(1,idPesanan);
-                            state.executeUpdate();
-                            showData();
-                            JOptionPane.showMessageDialog(null, "Data Berhasil Dihapus", "Pesan", JOptionPane.INFORMATION_MESSAGE);
+                            int ya = JOptionPane.showConfirmDialog(null, "Apakah akan membatalkan pesanan ini?","Pesan",JOptionPane.YES_NO_OPTION);
+                            if(ya == JOptionPane.YES_OPTION){
+                                state.executeUpdate();}
+                                showData();
+                                JOptionPane.showMessageDialog(null, "Pesanan dibatalkan", "Pesan", JOptionPane.INFORMATION_MESSAGE);
                     }
+                            
+                            
                     catch(Exception e){
-                        JOptionPane.showMessageDialog(null, "Data Gagal Dihapus", "Pesan", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Gagal Dibatalkan", "Pesan", JOptionPane.INFORMATION_MESSAGE);
                         e.printStackTrace();
                         System.out.println(idPesanan);
                     }

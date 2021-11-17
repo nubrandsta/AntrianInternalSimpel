@@ -12,6 +12,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.*;
 import java.time.format.DateTimeFormatter;  
 import java.time.LocalDateTime; 
+import javax.swing.table.*;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
@@ -63,6 +66,15 @@ public class Display extends javax.swing.JFrame {
             e.printStackTrace();
             
         }
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(tbl_display.getModel());
+        tbl_display.setRowSorter(sorter);
+        List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+
+        int columnIndexToSort = 4;
+        sortKeys.add(new RowSorter.SortKey(columnIndexToSort, SortOrder.ASCENDING));
+
+        sorter.setSortKeys(sortKeys);
+        sorter.sort();
     }
     
     
